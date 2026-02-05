@@ -1,0 +1,67 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f5f9;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input,
+select,
+button {
+  padding: 8px;
+  margin-top: 5px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 12px;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.blocks-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.messages .msg {
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.msg.error {
+  background: #ffd9d9;
+}
+
+.msg.success {
+  background: #d6ffe1;
+}
+
+.meta {
+  color: #666;
+  font-size: 12px;
+}

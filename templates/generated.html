@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card">
+  <h2>4) Документы созданы</h2>
+  <p>Номер счета: <strong>{{ invoice_name }}</strong></p>
+  <ul>
+    <li><a href="{{ url_for('download', filename=docx_name) }}">Скачать Word (.docx)</a></li>
+    <li><a href="{{ url_for('download', filename=pdf_name) }}">Скачать PDF (.pdf)</a></li>
+  </ul>
+  <a href="{{ url_for('index') }}">← Вернуться к шаблонам</a>
+</section>
+{% endblock %}

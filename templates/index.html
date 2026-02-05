@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card">
+  <h2>1) Создание шаблона счета</h2>
+  <form method="post" action="{{ url_for('create_template') }}" id="template-form">
+    <label>Название шаблона
+      <input type="text" name="title" required placeholder="Счет на услуги" />
+    </label>
+
+    <div class="blocks-head">
+      <h3>Блоки шаблона</h3>
+      <button type="button" id="add-block">Добавить блок</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Тип</th>
+          <th>Идентификатор</th>
+          <th>Текст / Значение по умолчанию</th>
+          <th>Неизменяемый</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="blocks-body"></tbody>
+    </table>
+
+    <input type="hidden" name="blocks" id="blocks-json" />
+    <button type="submit">Сохранить шаблон</button>
+  </form>
+</section>
+
+<section class="card">
+  <h2>2) Готовые шаблоны</h2>
+  {% if templates %}
+    <ul>
+      {% for item in templates %}
+      <li>
+        <strong>{{ item.title }}</strong>
+        <span class="meta">({{ item.created_at }})</span>
+        <a href="{{ url_for('fill_template', template_id=item.id) }}">Использовать</a>
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Пока шаблонов нет.</p>
+  {% endif %}
+</section>
+
+<script>
+  const body = document.getElementById('blocks-body');
+  const hidden = document.getElementById('blocks-json');
+
+  function addRow(data = { kind: 'static', identifier: '', text: '', immutable: false }) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>
+        <select class="kind">
+          <option value="static" ${data.kind === 'static' ? 'selected' : ''}>Текст</option>
+          <option value="field" ${data.kind === 'field' ? 'selected' : ''}>Поле</option>
+        </select>
+      </td>
+      <td><input type="text" class="identifier" value="${data.identifier}" placeholder="client_name"></td>
+      <td><input type="text" class="text" value="${data.text}" placeholder="ООО Ромашка"></td>
+      <td><input type="checkbox" class="immutable" ${data.immutable ? 'checked' : ''}></td>
+      <td><button type="button" class="remove">✕</button></td>
+    `;
+    tr.querySelector('.remove').addEventListener('click', () => tr.remove());
+    body.appendChild(tr);
+  }
+
+  document.getElementById('add-block').addEventListener('click', () => addRow());
+  document.getElementById('template-form').addEventListener('submit', (event) => {
+    const rows = [...body.querySelectorAll('tr')];
+    if (!rows.length) {
+      event.preventDefault();
+      alert('Добавьте минимум один блок');
+      return;
+    }
+
+    const blocks = rows.map((row) => ({
+      kind: row.querySelector('.kind').value,
+      identifier: row.querySelector('.identifier').value,
+      text: row.querySelector('.text').value,
+      immutable: row.querySelector('.immutable').checked,
+    }));
+    hidden.value = JSON.stringify(blocks);
+  });
+
+  addRow({ kind: 'static', identifier: '', text: 'СЧЕТ №', immutable: true });
+  addRow({ kind: 'field', identifier: 'invoice_number', text: 'Автоматически', immutable: true });
+  addRow({ kind: 'field', identifier: 'client_name', text: '', immutable: false });
+  addRow({ kind: 'field', identifier: 'total', text: '', immutable: false });
+</script>
+{% endblock %}

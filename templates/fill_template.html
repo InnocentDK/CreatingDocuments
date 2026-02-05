@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card">
+  <h2>3) Заполнение шаблона: {{ template_data.title }}</h2>
+  <form method="post" action="{{ url_for('generate', template_id=template_data.id) }}">
+    {% if fields %}
+      {% for field in fields %}
+      <label>{{ field.label }}
+        <input type="text" name="{{ field.identifier }}" required />
+      </label>
+      {% endfor %}
+    {% else %}
+      <p>Все поля в шаблоне помечены как неизменяемые.</p>
+    {% endif %}
+    <button type="submit">Сформировать документы</button>
+  </form>
+</section>
+{% endblock %}
